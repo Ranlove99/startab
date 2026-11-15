@@ -1,0 +1,19 @@
+{
+  "name": "StarTab · 我的起始页",
+  "short_name": "StarTab",
+  "description": "组件化新标签页：图标导航、壁纸、天气、热搜、待办与倒计时。",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#0b0f17",
+  "theme_color": "#0b0f17",
+  "lang": "zh-CN",
+  "icons": [
+    {
+      "src": "/assets/img/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}

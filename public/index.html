@@ -1,0 +1,226 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>StarTab · 我的起始页</title>
+<meta name="description" content="一个可部署在 Cloudflare Pages 的组件化新标签页：图标导航、壁纸、天气、热搜、待办与倒计时。">
+<meta name="theme-color" content="#0b0f17">
+<link rel="icon" href="/assets/img/icon.svg" type="image/svg+xml">
+<link rel="manifest" href="/manifest.json">
+<link rel="stylesheet" href="/assets/css/style.css">
+</head>
+<body>
+<div class="wallpaper" id="wallpaper"></div>
+<div class="veil" id="veil"></div>
+
+<header class="topbar">
+  <div class="brand"><span class="logo">✦</span><span id="siteTitle">StarTab</span></div>
+
+  <div class="search" id="search">
+    <button class="engine" id="engineBtn" type="button" title="切换搜索引擎">Bing</button>
+    <input id="searchInput" type="text" placeholder="搜索，或输入网址直接打开…" autocomplete="off" spellcheck="false" enterkeyhint="go">
+    <button class="go" id="searchGo" type="button" title="搜索">→</button>
+  </div>
+
+  <div class="actions">
+    <button class="icon-btn" id="themeBtn" title="切换主题" aria-label="切换主题">◐</button>
+    <button class="icon-btn" id="settingsBtn" title="设置" aria-label="设置">⚙</button>
+  </div>
+</header>
+
+<main class="layout">
+  <section class="nav-area">
+    <nav class="cats" id="cats" aria-label="分类"></nav>
+    <div class="grid" id="grid"></div>
+    <p class="empty-tip" id="emptyTip" hidden>这个分类还没有网站</p>
+    <button class="add-tile" id="addTile" type="button" hidden>＋ 添加网站</button>
+  </section>
+
+  <aside class="widgets" id="widgets">
+    <section class="card clock-card" id="clockCard">
+      <div class="clock-time" id="clockTime">--:--</div>
+      <div class="clock-date" id="clockDate"></div>
+      <div class="clock-greet" id="clockGreet"></div>
+    </section>
+
+    <section class="card weather-card" id="weatherCard">
+      <div class="card-head">
+        <span class="card-title">天气</span>
+        <button class="mini" id="weatherCity" type="button" title="切换城市">切换</button>
+      </div>
+      <div class="weather-main">
+        <span class="weather-icon" id="weatherIcon">☁️</span>
+        <div>
+          <div class="weather-temp" id="weatherTemp">--°</div>
+          <div class="weather-desc" id="weatherDesc">加载中…</div>
+        </div>
+      </div>
+      <div class="weather-meta" id="weatherMeta"></div>
+    </section>
+
+    <section class="card hot-card" id="hotCard">
+      <div class="card-head">
+        <div class="seg" id="hotTabs">
+          <button type="button" data-source="weibo" class="on">微博</button>
+          <button type="button" data-source="baidu">百度</button>
+          <button type="button" data-source="bili">B站</button>
+        </div>
+        <button class="mini" id="hotRefresh" type="button" title="刷新">↻</button>
+      </div>
+      <ol class="hot-list" id="hotList"></ol>
+    </section>
+
+    <section class="card todo-card" id="todoCard">
+      <div class="card-head">
+        <span class="card-title">待办</span>
+        <span class="mini muted" id="todoCount"></span>
+      </div>
+      <form class="todo-add" id="todoForm">
+        <input id="todoInput" placeholder="添加一条待办…" maxlength="200" autocomplete="off">
+        <button type="submit" title="添加">＋</button>
+      </form>
+      <ul class="todo-list" id="todoList"></ul>
+    </section>
+
+    <section class="card countdown-card" id="countdownCard">
+      <div class="card-head">
+        <span class="card-title">倒计时</span>
+        <button class="mini" id="countdownAdd" type="button" title="添加">＋</button>
+      </div>
+      <ul class="countdown-list" id="countdownList"></ul>
+    </section>
+  </aside>
+</main>
+
+<div class="scrim" id="scrim"></div>
+
+<aside class="drawer" id="drawer" aria-hidden="true">
+  <header class="drawer-head">
+    <h2>设置</h2>
+    <button class="icon-btn" id="drawerClose" type="button" aria-label="关闭">✕</button>
+  </header>
+
+  <div class="drawer-body">
+    <section class="group">
+      <h3>外观</h3>
+      <label class="row"><span>主题</span>
+        <select id="setTheme">
+          <option value="auto">跟随系统</option>
+          <option value="dark">深色</option>
+          <option value="light">浅色</option>
+        </select>
+      </label>
+      <label class="row"><span>主题色</span><input type="color" id="setAccent"></label>
+      <label class="row"><span>毛玻璃 <b id="blurVal">14</b></span><input type="range" id="setBlur" min="0" max="40"></label>
+      <label class="row"><span>图标大小 <b id="iconVal">54</b></span><input type="range" id="setIconSize" min="36" max="96"></label>
+      <label class="row"><span>每行数量 <b id="colVal">7</b></span><input type="range" id="setColumns" min="3" max="12"></label>
+    </section>
+
+    <section class="group">
+      <h3>壁纸</h3>
+      <label class="row"><span>来源</span>
+        <select id="setWallType">
+          <option value="bing">Bing 每日</option>
+          <option value="url">图片地址</option>
+          <option value="color">纯色</option>
+          <option value="gradient">渐变</option>
+          <option value="upload">本地图片</option>
+        </select>
+      </label>
+      <label class="row"><span>值</span><input id="setWallValue" placeholder="https://… 或 #1b2233 或渐变"></label>
+      <label class="row"><span>上传</span><input type="file" id="setWallFile" accept="image/*"></label>
+      <label class="row"><span>暗化 <b id="dimVal">0.34</b></span><input type="range" id="setDim" min="0" max="0.8" step="0.02"></label>
+    </section>
+
+    <section class="group">
+      <h3>搜索</h3>
+      <label class="row"><span>默认引擎</span><select id="setEngine"></select></label>
+      <label class="row"><span>新标签页打开</span><input type="checkbox" id="setNewTab"></label>
+    </section>
+
+    <section class="group">
+      <h3>小组件</h3>
+      <label class="row"><span>时钟</span><input type="checkbox" id="wClock"></label>
+      <label class="row"><span>天气</span><input type="checkbox" id="wWeather"></label>
+      <label class="row"><span>热搜</span><input type="checkbox" id="wHot"></label>
+      <label class="row"><span>待办</span><input type="checkbox" id="wTodo"></label>
+      <label class="row"><span>倒计时</span><input type="checkbox" id="wCountdown"></label>
+      <label class="row"><span>天气城市</span><input id="setCity" placeholder="搜索城市，如 杭州"></label>
+      <div class="city-results" id="cityResults"></div>
+    </section>
+
+    <section class="group admin-only">
+      <h3>分类管理</h3>
+      <div id="catManager" class="cat-manager"></div>
+      <button class="btn block" id="addCatBtn" type="button">＋ 新增分类</button>
+    </section>
+
+    <section class="group">
+      <h3>数据</h3>
+      <div class="btn-row">
+        <button class="btn" id="exportBtn" type="button">导出 JSON</button>
+        <button class="btn" id="importBtn" type="button">导入 JSON</button>
+        <button class="btn danger" id="resetBtn" type="button">恢复默认</button>
+      </div>
+      <input type="file" id="importFile" accept="application/json" hidden>
+    </section>
+
+    <section class="group">
+      <h3>账号</h3>
+      <div class="btn-row">
+        <button class="btn primary" id="loginBtn" type="button">登录管理</button>
+        <button class="btn" id="logoutBtn" type="button" hidden>退出登录</button>
+      </div>
+      <p class="hint" id="adminHint">登录后可编辑网站、分类与小组件；未登录时为只读访客视图。</p>
+    </section>
+
+    <p class="hint footer-hint">StarTab · Cloudflare Pages + KV · <a href="https://github.com/Ranlove99/startab" target="_blank" rel="noopener">GitHub</a></p>
+  </div>
+</aside>
+
+<dialog class="dialog" id="loginDialog">
+  <form id="loginForm">
+    <h3>管理登录</h3>
+    <p class="hint">输入部署时配置的 <code>TOKEN</code> 环境变量。</p>
+    <input type="password" id="passwordInput" autocomplete="current-password" placeholder="管理密码">
+    <p class="error" id="loginError"></p>
+    <div class="btn-row">
+      <button class="btn" type="button" data-close>取消</button>
+      <button class="btn primary" type="submit" id="loginSubmit">登录</button>
+    </div>
+  </form>
+</dialog>
+
+<dialog class="dialog" id="itemDialog">
+  <form id="itemForm">
+    <h3 id="itemDialogTitle">添加网站</h3>
+    <label>名称<input id="itemTitle" maxlength="60" required placeholder="GitHub"></label>
+    <label>网址<input id="itemUrl" maxlength="500" required placeholder="https://github.com" inputmode="url"></label>
+    <label>分类<select id="itemCat"></select></label>
+    <label>图标<input id="itemIcon" maxlength="500" placeholder="留空自动抓取；也可填 emoji 或图片地址"></label>
+    <label>颜色<input type="color" id="itemColor" value="#5b8cff"></label>
+    <div class="btn-row">
+      <button class="btn" type="button" data-close>取消</button>
+      <button class="btn primary" type="submit">保存</button>
+    </div>
+  </form>
+</dialog>
+
+<dialog class="dialog" id="countdownDialog">
+  <form id="countdownForm">
+    <h3>添加倒计时</h3>
+    <label>名称<input id="cdTitle" maxlength="40" required placeholder="春节"></label>
+    <label>日期<input id="cdDate" type="date" required></label>
+    <div class="btn-row">
+      <button class="btn" type="button" data-close>取消</button>
+      <button class="btn primary" type="submit">保存</button>
+    </div>
+  </form>
+</dialog>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script type="module" src="/assets/js/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,73 @@
+/** 首次访问时返回的默认配置（可作为你 fork 后的初始模板） */
+export const seedData = {
+  version: 1,
+  settings: {
+    siteTitle: 'StarTab',
+    theme: 'auto',
+    accent: '#5b8cff',
+    blur: 14,
+    iconSize: 54,
+    columns: 7,
+    dim: 0.34,
+    wallpaper: { type: 'bing', value: '' },
+    searchEngine: 'bing',
+    openInNewTab: true,
+    weather: { name: '北京', lat: 39.9042, lon: 116.4074, unit: 'c' },
+    hotSource: 'weibo',
+    widgets: { clock: true, weather: true, hot: true, todo: true, countdown: true },
+  },
+  categories: [
+    { id: 'c1', name: '常用', icon: '⭐', hidden: false },
+    { id: 'c2', name: '开发', icon: '🛠', hidden: false },
+    { id: 'c3', name: 'AI', icon: '🤖', hidden: false },
+    { id: 'c4', name: '设计', icon: '🎨', hidden: false },
+    { id: 'c5', name: '影音', icon: '🎬', hidden: false },
+    { id: 'c6', name: '效率', icon: '⚡', hidden: false },
+  ],
+  items: [
+    { id: 'i1', catId: 'c1', title: 'GitHub', url: 'https://github.com', icon: '', color: '#24292f' },
+    { id: 'i2', catId: 'c1', title: 'Gmail', url: 'https://mail.google.com', icon: '', color: '#ea4335' },
+    { id: 'i3', catId: 'c1', title: '哔哩哔哩', url: 'https://www.bilibili.com', icon: '', color: '#fb7299' },
+    { id: 'i4', catId: 'c1', title: '知乎', url: 'https://www.zhihu.com', icon: '', color: '#0084ff' },
+    { id: 'i5', catId: 'c1', title: '微博', url: 'https://weibo.com', icon: '', color: '#e6162d' },
+    { id: 'i6', catId: 'c1', title: '淘宝', url: 'https://www.taobao.com', icon: '', color: '#ff5000' },
+
+    { id: 'i7', catId: 'c2', title: 'MDN', url: 'https://developer.mozilla.org', icon: '', color: '#000000' },
+    { id: 'i8', catId: 'c2', title: 'Stack Overflow', url: 'https://stackoverflow.com', icon: '', color: '#f48024' },
+    { id: 'i9', catId: 'c2', title: 'V2EX', url: 'https://www.v2ex.com', icon: '', color: '#333333' },
+    { id: 'i10', catId: 'c2', title: '掘金', url: 'https://juejin.cn', icon: '', color: '#1e80ff' },
+    { id: 'i11', catId: 'c2', title: 'Cloudflare', url: 'https://dash.cloudflare.com', icon: '', color: '#f6821f' },
+    { id: 'i12', catId: 'c2', title: 'Vercel', url: 'https://vercel.com', icon: '', color: '#000000' },
+    { id: 'i13', catId: 'c2', title: 'npm', url: 'https://www.npmjs.com', icon: '', color: '#cb3837' },
+
+    { id: 'i14', catId: 'c3', title: 'ChatGPT', url: 'https://chatgpt.com', icon: '', color: '#10a37f' },
+    { id: 'i15', catId: 'c3', title: 'Claude', url: 'https://claude.ai', icon: '', color: '#d97757' },
+    { id: 'i16', catId: 'c3', title: 'Gemini', url: 'https://gemini.google.com', icon: '', color: '#4285f4' },
+    { id: 'i17', catId: 'c3', title: 'Hugging Face', url: 'https://huggingface.co', icon: '', color: '#ffcc4d' },
+    { id: 'i18', catId: 'c3', title: '通义千问', url: 'https://tongyi.aliyun.com', icon: '', color: '#615ced' },
+
+    { id: 'i19', catId: 'c4', title: 'Figma', url: 'https://www.figma.com', icon: '', color: '#f24e1e' },
+    { id: 'i20', catId: 'c4', title: 'Dribbble', url: 'https://dribbble.com', icon: '', color: '#ea4c89' },
+    { id: 'i21', catId: 'c4', title: 'Behance', url: 'https://www.behance.net', icon: '', color: '#1769ff' },
+    { id: 'i22', catId: 'c4', title: 'Iconify', url: 'https://icon-sets.iconify.design', icon: '', color: '#1769aa' },
+    { id: 'i23', catId: 'c4', title: 'Unsplash', url: 'https://unsplash.com', icon: '', color: '#111111' },
+
+    { id: 'i24', catId: 'c5', title: 'YouTube', url: 'https://www.youtube.com', icon: '', color: '#ff0000' },
+    { id: 'i25', catId: 'c5', title: 'Netflix', url: 'https://www.netflix.com', icon: '', color: '#e50914' },
+    { id: 'i26', catId: 'c5', title: 'Spotify', url: 'https://open.spotify.com', icon: '', color: '#1db954' },
+    { id: 'i27', catId: 'c5', title: '豆瓣', url: 'https://www.douban.com', icon: '', color: '#007722' },
+    { id: 'i28', catId: 'c5', title: '小红书', url: 'https://www.xiaohongshu.com', icon: '', color: '#ff2442' },
+
+    { id: 'i29', catId: 'c6', title: 'Notion', url: 'https://www.notion.so', icon: '', color: '#000000' },
+    { id: 'i30', catId: 'c6', title: '飞书', url: 'https://www.feishu.cn', icon: '', color: '#3370ff' },
+    { id: 'i31', catId: 'c6', title: '语雀', url: 'https://www.yuque.com', icon: '', color: '#00b96b' },
+    { id: 'i32', catId: 'c6', title: 'Linear', url: 'https://linear.app', icon: '', color: '#5e6ad2' },
+    { id: 'i33', catId: 'c6', title: '腾讯文档', url: 'https://docs.qq.com', icon: '', color: '#2b7cff' },
+  ],
+  todos: [
+    { id: 't1', text: '把 StarTab 部署到 Cloudflare Pages', done: false, createdAt: 0 },
+  ],
+  countdowns: [
+    { id: 'd1', title: '元旦', date: '2027-01-01' },
+  ],
+};
