@@ -1,3 +1,12 @@
 name = "startab"
 compatibility_date = "2026-10-01"
-pages_build_output_dir = "public"
+main = "worker/index.js"
+
+# Workers 静态资源：public 目录整体作为站点发布
+[assets]
+directory = "./public"
+binding = "ASSETS"
+
+# 如需改回 Cloudflare Pages 部署：
+# 删除 main 与 [assets] 两段，改为下面这行
+# pages_build_output_dir = "public"

@@ -35,53 +35,44 @@
 - 一键导出 / 导入 JSON、恢复默认
 - PWA，可安装到桌面
 
-## 部署到 Cloudflare Pages
+## 部署
 
-### 1. Fork 本仓库
+仓库同时支持 **Workers Builds** 与 **Pages**，`wrangler.toml` 默认是 Workers 配置。
 
-### 2. 创建 Pages 项目
+### 方式 A：Cloudflare Workers（推荐）
 
-Cloudflare Dashboard → **Workers & Pages** → **Create** → **Pages** → **Connect to Git** → 选择你的仓库。
+`worker/index.js` 是入口：把 `/api/*` 交给 `functions/api/*` 里已有的处理器，其余请求交给 `public/` 静态资源。因此同一套接口代码两种部署方式都能跑。
 
-构建设置：
+1. **Workers & Pages → Create → Workers → Connect to Git**，选择本仓库
+2. 构建命令：**留空**
+3. 部署命令：`npx wrangler deploy`
+4. 预览命令：`npx wrangler versions upload`
+5. 创建 KV：**Workers & Pages → KV → Create a namespace**
+6. 项目 **Settings → Bindings → Add → KV Namespace**：
+   - Variable name：`nav`（代码里写死 `env.nav`，不要改）
+   - 选择刚创建的命名空间
+7. **Settings → Variables and Secrets** 添加：
+   - `TOKEN`：管理后台密码，`openssl rand -base64 24` 生成
+   - `SESSION_SECRET`：另一个随机串（不填则用 `TOKEN` 派生）
+8. 重新部署
 
-| 项 | 值 |
-|---|---|
-| Framework preset | `None` |
-| Build command | 留空 |
-| Build output directory | `public` |
+访问 `https://<项目名>.<子域>.workers.dev`，点右上角 ⚙ → 登录管理。
 
-### 3. 创建并绑定 KV
+### 方式 B：Cloudflare Pages
 
-**Workers & Pages → KV → Create a namespace**，名字随意（例如 `startab_kv`）。
+1. 先改 `wrangler.toml`：删掉 `main` 与 `[assets]` 两段，改成一行 `pages_build_output_dir = "public"`
+2. **Workers & Pages → Create → Pages → Connect to Git**，选择本仓库
+3. 构建命令留空，构建输出目录 `public`，**部署命令留空**
+4. KV 绑定变量名 `nav`，环境变量同上
+5. 重新部署
 
-回到 Pages 项目 → **Settings → Functions → KV namespace bindings** → **Add binding**：
+> 常见错误：在 Pages 项目里把部署命令填成 `npx wrangler deploy`，会报 `Missing entry-point to Worker script or to assets directory`。Pages 不需要部署命令，产物目录已经由 `public` 指定。
 
-- Variable name：`nav`（代码里写死为 `env.nav`，不要改）
-- KV namespace：选刚创建的那个
+### 设为新标签页（可选）
 
-### 4. 配置环境变量
+部署出来的是一个网页，**不能直接替换 `chrome://newtab`**。三种方式：
 
-**Settings → Environment variables**：
-
-| 变量 | 必填 | 说明 |
-|---|---|---|
-| `TOKEN` | ✅ | 管理后台密码。**必须设置**，否则写接口整体关闭（fail-closed） |
-| `SESSION_SECRET` | 建议 | 会话签名密钥，建议 32 位以上随机串；不填则用 `TOKEN` 派生 |
-
-`TOKEN` 请用强随机串，例如 `openssl rand -base64 24`。它是唯一的写入口令，泄露等于站点被接管。
-
-### 5. 重新部署
-
-**Deployments → 最新一次部署 → ⋯ → Retry deployment**，让 KV 绑定与环境变量生效。
-
-访问 `https://<项目名>.pages.dev`，点右上角 ⚙ → 登录管理，输入 `TOKEN` 即可编辑。
-
-### 6. 设为新标签页（可选）
-
-Cloudflare Pages 是一个网页，**不能直接替换 `chrome://newtab`**。三种方式：
-
-1. 浏览器设置里把「启动时打开的页面」设为你的 Pages 域名
+1. 浏览器设置里把「启动时打开的页面」设为你的站点域名
 2. 安装任意 New Tab Redirect 类扩展，把新标签页指向该域名
 3. Chrome/Edge 安装 PWA 后从桌面启动
 
@@ -116,6 +107,9 @@ functions/
   api/auth.js             登录、会话校验、失败限流
   api/weather.js          Open-Meteo 代理 + 缓存
   api/hot.js              微博/百度/B站 热搜代理 + 缓存
+worker/
+  index.js                Workers 入口：/api/* 转给 functions，其余交给静态资源
+wrangler.toml             Workers 配置（main + [assets]）
 ```
 
 ## 安全设计
