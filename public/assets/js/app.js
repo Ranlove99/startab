@@ -35,6 +35,7 @@ const applyWallpaper = () => {
   const el = $('wallpaper');
   const type = s.wallpaper.type;
   const value = (s.wallpaper.value || '').trim();
+  document.body.dataset.wall = type;
 
   if (type === 'color') {
     el.style.backgroundImage = 'none';

@@ -19,13 +19,13 @@
 }
 
 [data-theme='light'] {
-  --fg: #101828;
-  --muted: #5c6b87;
-  --card: rgba(255, 255, 255, 0.72);
+  --fg: #0b1220;
+  --muted: #45546e;
+  --card: rgba(255, 255, 255, 0.87);
   --card-hover: #ffffff;
-  --border: rgba(16, 24, 40, 0.09);
-  --input: rgba(255, 255, 255, 0.9);
-  --shadow: 0 18px 50px rgba(31, 45, 70, 0.13);
+  --border: rgba(16, 24, 40, 0.13);
+  --input: rgba(255, 255, 255, 0.95);
+  --shadow: 0 18px 50px rgba(31, 45, 70, 0.16);
 }
 
 * { box-sizing: border-box; }
@@ -144,7 +144,7 @@ a { color: var(--accent); text-decoration: none; }
   font-size: 15px;
 }
 
-.search input::placeholder { color: var(--muted); opacity: 0.75; }
+.search input::placeholder { color: var(--muted); opacity: 0.9; }
 
 .search .go {
   border: 0;
@@ -215,12 +215,15 @@ a { color: var(--accent); text-decoration: none; }
   padding: 7px 14px;
   border-radius: 10px;
   font-size: 13.5px;
+  font-weight: 500;
   display: flex;
   align-items: center;
   gap: 6px;
   white-space: nowrap;
   transition: background 0.18s, color 0.18s;
 }
+
+[data-theme='light'] .cats { background: rgba(255, 255, 255, 0.9); }
 
 .cat:hover { color: var(--fg); background: var(--input); }
 
@@ -302,11 +305,28 @@ a { color: var(--accent); text-decoration: none; }
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  text-shadow: 0 1px 8px rgba(0, 0, 0, 0.28);
-  opacity: 0.94;
+  padding: 2px 9px;
+  border-radius: 999px;
+  line-height: 1.55;
+  color: #fff;
+  background: rgba(6, 10, 18, 0.45);
+  backdrop-filter: blur(8px);
+  box-shadow: 0 1px 6px rgba(0, 0, 0, 0.18);
 }
 
-[data-theme='light'] .tile .name { text-shadow: none; }
+[data-theme='light'] .tile .name {
+  color: #0b1220;
+  background: rgba(255, 255, 255, 0.93);
+  box-shadow: 0 2px 10px rgba(16, 24, 40, 0.16);
+}
+
+/* 纯色背景时不需要底衬，保持干净 */
+body[data-wall='color'] .tile .name {
+  padding: 0;
+  background: transparent;
+  box-shadow: none;
+  color: var(--fg);
+}
 
 .tile .ops {
   position: absolute;
